@@ -8,3 +8,5 @@ Each of us will present our own data, code, and results in a single google slide
 
 ## Data
 Data is already uploaded for both 2020 and 2000 in the data folder.  Column descriptions are availble on the project preposal google doc - https://docs.google.com/document/d/1IxfPSOUbbOqqe6f04rqDRJWzSzsw7vlkgBry313jUm8/edit#
+
+Column descriptions are available at https://crashstats.nhtsa.dot.gov/Api/Public/ViewPublication/813254
