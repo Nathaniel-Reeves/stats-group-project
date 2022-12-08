@@ -1,9 +1,11 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
 data = pd.read_csv("accident.csv")
 df = pd.DataFrame(data)
 state_highway = df[df.STATE == 49][df.ROUTE == 3]
 federal_highway = df[df.STATE == 49][df.ROUTE == 2]
-interstate = df[df.STATE == 49][df.ROUTENAME == 1]
+interstate = df[df.STATE == 49][df.ROUTE == 1]
 county_road = df[df.STATE == 49][df.ROUTE == 4]
 local_street_municipality = df[df.STATE == 49][df.ROUTE == 6]
 local_street_township = df[df.STATE == 49][df.ROUTE == 5]
