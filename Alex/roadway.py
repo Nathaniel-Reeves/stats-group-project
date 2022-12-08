@@ -1,8 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import statsmodels.api as sm
-data = pd.read_csv("accident.csv")
+data = pd.read_csv("data/FARS2020NationalCSV/ACCIDENT.csv", encoding_errors='replace')
+data1 = pd.read_csv("data/FARS2000NationalCSV/ACCIDENT.CSV", encoding_errors='replace')
 df = pd.DataFrame(data)
+df1 = pd.DataFrame(data1)
 state_highway = df[df.STATE == 49][df.ROUTE == 3]
 federal_highway = df[df.STATE == 49][df.ROUTE == 2]
 interstate = df[df.STATE == 49][df.ROUTE == 1]
@@ -30,3 +31,7 @@ nonmotorists_township = local_street_township.PEDS
 nonmotorists_frontage = local_street_frontage_road.PEDS
 nonmotorists_other = other_road.PEDS
 nonmotorists_unknown = unknown.PEDS
+#Make changes to the variables used to see bar graph results
+plt.xlabel("Number of nonmotorists involved in crashes on unknown Utah roads")
+plt.ylabel("Number of fatalities in crashes on unknown Utah roads")
+plt.bar(nonmotorists_unknown, unknown.FATALS)
