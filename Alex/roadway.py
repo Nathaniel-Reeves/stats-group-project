@@ -1,10 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 data = pd.read_csv("accident2020.csv", encoding_errors='replace')
-data1 = pd.read_csv("ACCIDENT2000.csv", encoding_errors='replace')
 df = pd.DataFrame(data)
-df1 = pd.DataFrame(data1)
-#2020 data
 state_highway = df[df.STATE == 49][df.ROUTE == 3]
 federal_highway = df[df.STATE == 49][df.ROUTE == 2]
 interstate = df[df.STATE == 49][df.ROUTE == 1]
