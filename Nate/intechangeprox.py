@@ -16,6 +16,8 @@ import seaborn as sns
 
 import math as m
 
+import os
+
 #          2013-    2018-   2020-
 # 2010     2017     2019    Later
 # 1         1       1       1       Not an Intersection
@@ -37,13 +39,31 @@ def getData(filename):
     return data
 
 def main():
-    filepath = "C:/Users/natha/Documents/GitHub/stats-group-project/data/FARS2020NationalCSV/accident.CSV"
-
-    totalDeathsPerIntersection = {"Intersections":["Not an Intersection", "Four-Way Intersection", "T-Intersection", "Y-Intersection", "Traffic Circle", "Roundabout", "Five-Point, or More", "L-Intersection", "Other Intersection", "Reported as Unknown"], "TotalDeaths":[0,0,0,0,0,0,0,0,0,0]}
-
-
+    # get data from file
+    filepath = "../data/FARS2020NationalCSV/accident.csv"
     accident2020 = getData(filepath)
+
+    # create a frame to total death counts from each intersection
+    totalDeathsPerIntersection = {
+        "Intersections": [
+            "Not an Intersection", 
+            "Four-Way Intersection", 
+            "T-Intersection", 
+            "Y-Intersection", 
+            "Traffic Circle",
+            "Roundabout", 
+            "Five-Point, or More", 
+            "L-Intersection", 
+            "Other Intersection", 
+            "Reported as Unknown"
+            ], 
+            # initialize the counts at zero
+            "TotalDeaths": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }
+
+    # for loop through data counting each death for each intersection
     intersectionFatals = accident2020[["TYP_INT","FATALS"]]
+
     for i in range(len(intersectionFatals)):
         if intersectionFatals.TYP_INT[i] == 1:
             intersectionFatals.at[i,"TYP_INT"] = "Not an Intersection"
@@ -76,16 +96,52 @@ def main():
             intersectionFatals.at[i,"TYP_INT"]  = "Reported as Unknown"
             totalDeathsPerIntersection["TotalDeaths"][9] += intersectionFatals.at[i, "FATALS"]
 
+    # compile and print death counts into a dataframe
     orgData = pd.DataFrame(totalDeathsPerIntersection)
-
     print(orgData)
 
+    # create bar plot in normal scale
+    plt.bar(orgData.Intersections, orgData.TotalDeaths)
+    plt.xticks(rotation=90)
+    plt.title("Total Fatalities at Given Intersections in 2020")
+    plt.xlabel("Intersection Type")
+    plt.ylabel("Fatals")
+    plt.show()
+
+    # create bar plot using log scale
     fig, ax = plt.subplots()
     plt.xticks(rotation=90)
     ax.bar(orgData.Intersections, orgData.TotalDeaths)
+    plt.title("Total Fatalities at Given Intersections in 2020 (Log Scale)")
     ax.set_yscale('log')
     ax.set_xlabel("Intersection Type")
     ax.set_ylabel("Fatals")
+    plt.show()
+
+    # Calculate probability statistics based off of total fatalities
+    totalFatals = sum(orgData.TotalDeaths)
+    probabilities = {}
+    other = 0
+    for row_i in range(len(orgData.Intersections)):
+        intersection = orgData.Intersections[row_i]
+        deaths = int(orgData.TotalDeaths[row_i])
+        prob = deaths/totalFatals
+        calc = {"i": intersection, "p": prob}
+        if prob > 0.05:
+            probabilities[intersection] = prob
+        else:
+            other += prob
+        probabilities["Other Intersections"] = other
+
+        result = "Probability of death on %(i)s is %(p)s." % calc
+        print(result)
+
+    new_lst = [f'{i*100:.1f}%' for i in list(probabilities.values())]
+
+    # plot a pie chart on probabilities
+    plt.pie(list(probabilities.values()), labels=new_lst)
+    plt.title("Probability of Deaths")
+    plt.legend(list(probabilities.keys()), loc='upper right')
     plt.show()
 
 
